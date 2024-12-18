@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\PegawaiController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,18 +16,40 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('admin.dashboard.index');
+// Route::get('/', function () {
+
+
+//     return view('admin.dashboard.index');
+// });
+
+// Auth
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'process_login'])->name('process.login');
+Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/register', [AuthController::class, 'process_register'])->name('process.register');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Route untuk halaman admin (hanya akses jika sudah login dan level admin)
+Route::middleware(['auth', 'admin'])->get('/admin', function () {
+    $user = User::all();
+    // count user role admin and pegawai
+    $admin = User::where('role', 'admin')->count();
+    $pegawai = User::where('role', 'pegawai')->count();
+    return view('admin.dashboard.index', compact('user', 'admin', 'pegawai'));
+    // return view('admin.dashboard.index'); // Sesuaikan dengan view dashboard admin Anda
+})->name('admin_dashboard');
+
+// Group rute untuk pegawai dengan prefix 'pegawai'
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function() {
+    Route::get('/pegawai', [PegawaiController::class, 'index'])->name('pegawai.index');
+    Route::get('/pegawai/show/{id}', [PegawaiController::class, 'show'])->name('pegawai.show');
+    Route::post('/pegawai', [PegawaiController::class, 'store'])->name('pegawai.store');
+    Route::get('/pegawai/edit/{id}', [PegawaiController::class, 'edit'])->name('pegawai.edit');
+    Route::put('/pegawai/update/{id}', [PegawaiController::class, 'update'])->name('pegawai.update');
+    Route::delete('/pegawai/{id}', [PegawaiController::class, 'destroy'])->name('pegawai.destroy');
 });
 
-Route::prefix('pegawai')->group(function() {
-    Route::get('/', [PegawaiController::class, 'index'])->name('pegawai.index');
-    Route::get('/show/{id}', [PegawaiController::class, 'show'])->name('pegawai.show');
-    Route::post('/', [PegawaiController::class, 'store'])->name('pegawai.store');
-    Route::get('/edit/{id}', [PegawaiController::class, 'edit'])->name('pegawai.edit');
-    Route::put('/update/{id}', [PegawaiController::class, 'update'])->name('pegawai.update');
-    Route::delete('/{id}', [PegawaiController::class, 'destroy'])->name('pegawai.destroy');
-});
+
 
 // Route::middleware(['auth', 'role:pegawai'])->group(function () {
 //     Route::resource('pegawai', PegawaiController::class);
