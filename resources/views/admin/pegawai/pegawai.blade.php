@@ -65,7 +65,6 @@
                             <th>Email</th>
                             <th>Jabatan</th>
                             <th>Tanggal Bergabung</th>
-                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -77,17 +76,14 @@
                                 <td>{{ $p->jabatan }}</td>
                                 <td>{{ $p->tanggal_bergabung }}</td>
                                 <td>
-                                    <span class="badge bg-success">Active</span>
-                                </td>
-                                <td>
                                     <a href="{{ route('pegawai.edit', $p->id) }}" class="btn btn-primary"><i
-                                            data-feather="triangle" width="20"></i></a>
-                                    <form action="{{ route('pegawai.destroy', $p->id) }}" method="POST" class="d-inline">
+                                            data-feather="edit" width="20"></i></a>
+                                    {{-- <form action="{{ route('pegawai.destroy', $p->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger"><i data-feather="trash"
                                                 width="20"></i></button>
-                                    </form>
+                                    </form> --}}
                                     <button type="button" class="btn btn-info" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal" onclick="showEmployee({{ $p->id }})">
                                         <i data-feather="eye" width="20"></i>
@@ -187,7 +183,7 @@
             });
 
             $.ajax({
-                url: '/pegawai/show/' + id,
+                url: '/admin/pegawai/show/' + id,
                 method: 'GET',
                 success: function(response) {
                     $('#pegawai-name').val(response.name);
@@ -229,7 +225,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/pegawai/' + currentEmployeeId,
+                        url: '/admin/pegawai/' + currentEmployeeId,
                         method: 'DELETE',
                         data: {
                             _token: $('meta[name="csrf-token"]').attr('content') // Tambahkan CSRF token
