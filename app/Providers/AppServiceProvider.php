@@ -13,7 +13,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             \App\Repositories\PegawaiRepositoryInterface::class,
-            \App\Repositories\PegawaiRepository::class
+            \App\Repositories\PegawaiRepository::class,
+        );
+
+        $this->app->bind(
+            \App\Repositories\AuthRepositoryInterface::class,
+            \App\Repositories\AuthRepository::class
         );
     }
 
