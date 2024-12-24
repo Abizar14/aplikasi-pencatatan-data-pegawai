@@ -45,7 +45,6 @@ class PegawaiController extends Controller
 
     public function edit($id)
     {
-        // $pegawai = $this->pegawaiService->getPegawaiById($id);
         try {
             $pegawai = $this->pegawaiService->getPegawaiById($id);
             return view('admin.pegawai.pegawai-edit', compact('pegawai'));

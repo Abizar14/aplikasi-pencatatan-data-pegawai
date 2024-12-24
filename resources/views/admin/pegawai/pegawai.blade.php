@@ -89,7 +89,6 @@
                                         <i data-feather="eye" width="20"></i>
                                     </button>
 
-                                    {{-- <a href="{{ route('pegawai.destroy', $p->id) }}" class="btn btn-danger">delete</a> --}}
                                 </td>
                             </tr>
                         @endforeach
@@ -192,7 +191,7 @@
                     $('#pegawai-tanggal_bergabung').val(response.tanggal_bergabung);
 
                     currentEmployeeId = response.id;
-                    console.log(currentEmployeeId)
+                    console.log(response)
                     $('#delete-button').attr('onclick', 'deleteEmployee(' + currentEmployeeId + ')');
                 },
                 error: function() {
